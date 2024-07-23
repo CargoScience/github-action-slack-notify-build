@@ -1,4 +1,4 @@
-import { formatChannelName, buildSlackAttachments } from '../src/utils';
+import { formatChannelName, buildSlackAttachments } from '../src/utils.mjs';
 import { GITHUB_PUSH_EVENT, GITHUB_PR_EVENT } from '../fixtures';
 const runId = parseInt(process.env.GITHUB_RUN_ID, 10);
 

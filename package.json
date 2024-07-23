@@ -1,10 +1,10 @@
 {
   "name": "github-action-slack-notify-build",
   "version": "1.6.0",
-  "main": "index.js",
+  "main": "index.mjs",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "ncc build index.js",
+    "build": "ncc build index.mjs",
     "test": "jest"
   },
   "dependencies": {

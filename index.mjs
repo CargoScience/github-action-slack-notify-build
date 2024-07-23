@@ -1,6 +1,6 @@
 import { getInput, setFailed, setOutput } from '@actions/core';
 import { WebClient } from '@slack/web-api';
-import { buildSlackAttachments, formatChannelName } from './src/utils';
+import { buildSlackAttachments, formatChannelName } from './src/utils.mjs';
 
 export const handler = async () => {
   try {
