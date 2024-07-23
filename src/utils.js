@@ -1,12 +1,12 @@
-const { context } = require('@actions/github');
+import { context } from '@actions/github';
 
-function buildSlackAttachments({ status, color, github, author, commit_message }) {
-  const { payload, ref, workflow, eventName } = github.context;
+function buildSlackAttachments({ status, color, author, commit_message }) {
+  const { payload, ref, workflow, eventName } = context;
   const { owner, repo } = context.repo;
   const event = eventName;
   const branch = event === 'pull_request' ? payload.pull_request.head.ref : ref.replace('refs/heads/', '');
 
-  const sha = event === 'pull_request' ? payload.pull_request.head.sha : github.context.sha;
+  const sha = event === 'pull_request' ? payload.pull_request.head.sha : context.sha;
   const runId = parseInt(process.env.GITHUB_RUN_ID, 10);
 
   const referenceLink =
@@ -65,10 +65,8 @@ function buildSlackAttachments({ status, color, github, author, commit_message }
   ];
 }
 
-module.exports.buildSlackAttachments = buildSlackAttachments;
-
 function formatChannelName(channel) {
   return channel.replace(/[#@]/g, '');
 }
 
-module.exports.formatChannelName = formatChannelName;
+export { buildSlackAttachments, formatChannelName };

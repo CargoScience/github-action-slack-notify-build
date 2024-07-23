@@ -1,29 +1,28 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const { WebClient } = require('@slack/web-api');
-const { buildSlackAttachments, formatChannelName } = require('./src/utils');
+import { getInput, setFailed, setOutput } from '@actions/core';
+import { WebClient } from '@slack/web-api';
+import { buildSlackAttachments, formatChannelName } from './src/utils';
 
-(async () => {
+export const handler = async () => {
   try {
-    const channel = core.getInput('channel');
-    const status = core.getInput('status');
-    const color = core.getInput('color');
-    const messageId = core.getInput('message_id');
-    const author = core.getInput('author');
-    const commit_message = core.getInput('commit_message');
+    const channel = getInput('channel');
+    const status = getInput('status');
+    const color = getInput('color');
+    const messageId = getInput('message_id');
+    const author = getInput('author');
+    const commit_message = getInput('commit_message');
     const token = process.env.SLACK_BOT_TOKEN;
     const slack = new WebClient(token);
 
-    if (!channel && !core.getInput('channel_id')) {
-      core.setFailed(`You must provider either a 'channel' or a 'channel_id'.`);
+    if (!channel && !getInput('channel_id')) {
+      setFailed(`You must provider either a 'channel' or a 'channel_id'.`);
       return;
     }
 
-    const attachments = buildSlackAttachments({ status, color, github, author, commit_message });
-    const channelId = core.getInput('channel_id') || (await lookUpChannelId({ slack, channel }));
+    const attachments = buildSlackAttachments({ status, color, author, commit_message });
+    const channelId = getInput('channel_id') || (await lookUpChannelId({ slack, channel }));
 
     if (!channelId) {
-      core.setFailed(`Slack channel ${channel} could not be found.`);
+      setFailed(`Slack channel ${channel} could not be found.`);
       return;
     }
 
@@ -40,11 +39,11 @@ const { buildSlackAttachments, formatChannelName } = require('./src/utils');
 
     const response = await slack.chat[apiMethod](args);
 
-    core.setOutput('message_id', response.ts);
+    setOutput('message_id', response.ts);
   } catch (error) {
-    core.setFailed(error);
+    setFailed(error);
   }
-})();
+};
 
 async function lookUpChannelId({ slack, channel }) {
   let result;
