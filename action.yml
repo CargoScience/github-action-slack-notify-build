@@ -20,6 +20,12 @@ inputs:
   message_id:
     description: 'The ID of the existing Slack message to update.'
     required: false
+  author:
+    description: 'The author of the commit.'
+    required: false
+  commit_message:
+    description: 'The commit message.'
+    required: false
 outputs:
   message_id:
     description: 'The unique timestamp identifier of the Slack message sent'
